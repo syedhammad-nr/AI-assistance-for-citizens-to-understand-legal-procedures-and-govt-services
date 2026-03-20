@@ -11,10 +11,12 @@ app.post("/api/chat", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
+    console.log("MODEL USED:", "llama3-70b-8192");
+
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-        model: "llama3-8b-8192", // FREE + FAST
+       model: "llama-3.1-8b-instant", // FREE + FAST
         messages: [
           {
             role: "system",
