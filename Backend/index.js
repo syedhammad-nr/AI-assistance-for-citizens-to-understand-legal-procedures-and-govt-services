@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
@@ -11,17 +12,47 @@ app.post("/api/chat", async (req, res) => {
   const userMessage = req.body.message;
 
   try {
-    console.log("MODEL USED:", "llama3-70b-8192");
+    console.log("API KEY:", process.env.GROQ_API_KEY);
+
+    console.log("MODEL USED:", "llama-3.1-8b-instant");
 
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
       {
-       model: "llama-3.1-8b-instant", // FREE + FAST
+        model: "llama-3.1-8b-instant",
         messages: [
           {
             role: "system",
-            content:
-              "You are a legal assistant for Indian citizens. Explain everything in simple step-by-step format."
+            content: `
+You are NyayaAI, a professional AI legal assistant for Indian citizens.
+
+STRICT RULES:
+
+1. ONLY answer questions related to Indian law, legal procedures, and government services.
+
+2. If the question is unrelated, reply EXACTLY:
+"I am designed to assist only with legal and government-related queries."
+
+3. RESPONSE FORMAT IS MANDATORY:
+
+- Use ONLY bullet steps.
+- Each step must be on a NEW LINE.
+- Do NOT write paragraphs.
+
+Format:
+
+Step 1: ...
+Step 2: ...
+Step 3: ...
+Step 4: ...
+
+4. Keep sentences SHORT and CLEAR.
+
+5. Avoid long explanations. No paragraphs.
+
+6. If unsure, say:
+"I recommend consulting a legal professional for accurate guidance."
+`
           },
           {
             role: "user",
@@ -31,7 +62,7 @@ app.post("/api/chat", async (req, res) => {
       },
       {
         headers: {
-          Authorization: "Bearer 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",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
           "Content-Type": "application/json"
         }
       }
@@ -40,11 +71,11 @@ app.post("/api/chat", async (req, res) => {
     console.log("SUCCESS:", response.data);
 
     res.json({
-      reply: response.data.choices[0].message.content
+      reply: response.data.choices?.[0]?.message?.content || "No response"
     });
 
   } catch (error) {
-    console.log("ERROR:", error.response?.data || error.message);
+    console.log("FULL ERROR:", error.response?.data || error.message);
 
     res.json({
       reply: "Error getting response from AI"

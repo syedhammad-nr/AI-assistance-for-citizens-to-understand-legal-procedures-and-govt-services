@@ -53,7 +53,9 @@ function App() {
               backgroundColor: msg.role === "user" ? "#4CAF50" : "#333"
             }}
           >
-            {msg.text}
+            {msg.text.split("\n").map((line, i) => (
+  <div key={i}>{line}</div>
+))}
           </div>
         ))}
 
