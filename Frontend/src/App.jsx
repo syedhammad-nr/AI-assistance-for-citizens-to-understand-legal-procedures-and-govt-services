@@ -54,7 +54,16 @@ function App() {
             }}
           >
             {msg.text.split("\n").map((line, i) => (
-  <div key={i}>{line}</div>
+  <div key={i} style={{
+    background: msg.role === "user" ? "#22c55e" : "#1e293b",
+    padding: "10px 14px",
+    borderRadius: "12px",
+    marginBottom: "6px",
+    maxWidth: "80%",
+    alignSelf: msg.role === "user" ? "flex-end" : "flex-start"
+  }}>
+    {line}
+  </div>
 ))}
           </div>
         ))}
@@ -66,11 +75,17 @@ function App() {
 
       <div style={styles.inputContainer}>
         <input
-          style={styles.input}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          placeholder="Ask your legal question..."
-        />
+  style={styles.input}
+  value={message}
+  onChange={(e) => setMessage(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === "Enter" && message.trim() !== "") {
+      e.preventDefault(); // 🔥 IMPORTANT
+      sendMessage();
+    }
+  }}
+  placeholder="Ask your legal question..."
+/>
         <button style={styles.button} onClick={sendMessage}>
           Send
         </button>
