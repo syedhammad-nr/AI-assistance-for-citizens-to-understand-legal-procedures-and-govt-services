@@ -1,0 +1,51 @@
+const allowedKeywords = [
+  "aadhaar",
+  "aadhar",
+  "pan",
+  "passport",
+  "ration",
+  "voter",
+  "complaint",
+  "fir",
+  "police",
+  "court",
+  "case",
+  "legal",
+  "law",
+  "bail",
+  "notice",
+  "certificate",
+  "income",
+  "tax",
+  "scheme",
+  "yojana",
+  "subsidy",
+  "pension",
+  "scholarship",
+  "government",
+  "govt",
+  "document",
+  "license",
+  "dl",
+  "registration",
+  "property",
+  "land",
+  "marriage",
+  "divorce",
+  "consumer",
+  "grievance",
+  "municipal",
+  "service",
+  "epfo",
+  "esic",
+  "domicile",
+  "birth certificate",
+  "death certificate",
+];
+
+const isRelevantGovernmentQuery = (message = "") => {
+  const normalized = message.toLowerCase();
+  return allowedKeywords.some((keyword) => normalized.includes(keyword));
+};
+
+module.exports = { isRelevantGovernmentQuery };
